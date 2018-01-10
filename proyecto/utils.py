@@ -71,3 +71,24 @@ def plot_svc_decision_function(model, ax=None, plot_support=True):
                    s=300, linewidth=1, facecolors='none');
     ax.set_xlim(xlim)
     ax.set_ylim(ylim)
+
+
+def df_to_sarray(df):
+    """
+    Convert a pandas DataFrame object to a numpy structured array.
+    This is functionally equivalent to but more efficient than
+    np.array(df.to_array())
+
+    :param df: the data frame to convert
+    :return: a numpy structured array representation of df
+    """
+
+    v = df.values
+    cols = df.columns
+
+    types = [(cols[i], df[k].dtype.type) for (i, k) in enumerate(cols)]
+    dtype = np.dtype(types)
+    z = np.zeros(v.shape[0], dtype)
+    for (i, k) in enumerate(z.dtype.names):
+        z[k] = v[:, i]
+    return z
